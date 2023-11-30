@@ -14,7 +14,8 @@ body {
   display: flex;
   justify-content: center;
   align-items: start;
-  margin-top: 5rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
   padding: 0;
   width: 100%;
   height: 50%;
@@ -48,9 +49,9 @@ button {
   font-size: 1.2rem;
   border-radius: 5px;
   cursor: pointer;
-  /* centrar */
   display: block;
   margin: 0 auto;
+  margin-bottom: 20px;
   margin-top: 1rem;
 }
 
@@ -70,7 +71,21 @@ button {
 .animated {
   animation: flip 0.5s ease;
 }
+.key-tile.right {
+  background-color: var(--right);
+}
 
+.key-tile.wrong {
+  background-color: var(--wrong);
+}
+
+.key-tile.empty {
+  background-color: var(--empty);
+}
+
+.key-tile.invalid {
+  background-color: var(--invalid);
+}
 @keyframes flip {
   0% {
     transform: scaleY(1);
@@ -90,4 +105,45 @@ button {
   font-size: 3rem;
   margin-bottom: 0;
   position: relative;
+}
+.keyboard-row {
+    width: 400px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.key-tile {
+    width: 36px;
+    height: 40px;
+    margin: 1px;
+    background-color: #818384;
+    border-radius: 8px;
+    color: azure;
+    /* Text */
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.enter-key-tile {
+    width: 76px;
+    height: 40px;
+    margin: 1px;
+    background-color: #818384;
+    /* Text */
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 8px;
+    color: azure;
+}
+.key-tile, .enter-key-tile {
+  font-family: Arial, Helvetica, sans-serif;
 }

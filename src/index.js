@@ -37,39 +37,9 @@ function dibujarCaja(contenedor, row, col, letter = '') {
   box.textContent = letter;
   box.id = `box${row}${col}`;
 
-  box.addEventListener('click', () => {
-    const hiddenInput = document.getElementById('hidden-input');
-    hiddenInput.focus();
-  });
 
   contenedor.appendChild(box);
   return box;
-}
-
-function eventosDelTeclado() {
-  document.body.onkeydown = (e) => {
-    const key = e.key;
-    if (key === 'Enter') {
-      if (estado.columnaActual === 5) {
-        const palabra = obtenerPalabraActual();
-        if (esPalabraInvalida(palabra)) {
-          revelarPalabra(palabra);
-          estado.filaActual++;
-          estado.columnaActual = 0;
-        } else {
-          alert('Palabra invalida!');
-        }
-      }
-    }
-    if (key === 'Backspace') {
-      removerLetra();
-    }
-    if (esLetra(key)) {
-      agregarLetra(key);
-    }
-
-    actualizarGrilla();
-  };
 }
 
 function obtenerPalabraActual() {
@@ -109,6 +79,7 @@ function revelarPalabra(adivinar) {
   for (let i = 0; i < 5; i++) {
     const box = document.getElementById(`box${row}${i}`);
     const letra = box.textContent.toLowerCase();
+    const keyTile = document.getElementById(`Key${letra.toUpperCase()}`)
     const numOcurrenciasSecreto = obtenerNumOcurrenciasSecreto(secret, letra);
     const numOcurrenciasAdivinanza = obtenerNumOcurrenciasSecreto(adivinar, letra);
     const posicionLetra = obtenerPosicionOcurrencia(adivinar, letra, i);
@@ -116,18 +87,33 @@ function revelarPalabra(adivinar) {
     setTimeout(() => {
       if (!esPalabraInvalida(adivinar)) {
         box.classList.add('invalid');
+        if (keyTile && !keyTile.classList.contains('right')) {
+          keyTile.classList.add('invalid');
+        }
       } else if (
         numOcurrenciasAdivinanza > numOcurrenciasSecreto &&
         posicionLetra > numOcurrenciasSecreto
       ) {
         box.classList.add('empty');
+        if (keyTile && !keyTile.classList.contains('right')) {
+          keyTile.classList.add('empty');
+        }
       } else {
         if (letra === secret[i]) {
           box.classList.add('right');
+          if (keyTile) {
+            keyTile.classList.add('right');
+          }
         } else if (secret.includes(letra)) {
           box.classList.add('wrong');
+          if (keyTile && !keyTile.classList.contains('right')) {
+            keyTile.classList.add('wrong');
+          }
         } else {
           box.classList.add('empty');
+          if (keyTile && !keyTile.classList.contains('right')) {
+            keyTile.classList.add('empty');
+          }
         }
       }
     }, ((i + 1) * animation_duration) / 2);
@@ -172,14 +158,113 @@ function iniciar() {
 
   console.log(`La palabra secreta es: ${estado.secret}`);
 
-  eventosDelTeclado();
-}
-document.getElementById('reiniciar').addEventListener('click', reiniciar);
-
-function reiniciar() {
-  window.location.reload();
+  // Listen for Key Press
+  document.addEventListener("keyup", (e) => {
+    processInputKeyboard(e);
+  })
 }
 
 
 
+let keyboard = [
+    ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
+    ["A", "S", "D", "F", "G", "H", "J", "K", "L"],
+    ["Enter", "Z", "X", "C", "V", "B", "N", "M", "⌫" ]
+]
+
+for (let i = 0; i < keyboard.length; i++) {
+    let currRow = keyboard[i];
+    let keyboardRow = document.createElement("div");
+    keyboardRow.classList.add("keyboard-row");
+
+    for (let j = 0; j < currRow.length; j++) {
+        let keyTile = document.createElement("div");
+
+        let key = currRow[j];
+        keyTile.innerText = key;
+        if (key == "Enter") {
+            keyTile.id = "Enter";
+        }
+        else if (key == "⌫") {
+            keyTile.id = "Backspace";
+        }
+        else if ("A" <= key && key <= "Z") {
+            keyTile.id = "Key" + key; // "Key" + "A";
+        } 
+
+        keyTile.addEventListener("click", processKey);
+
+        if (key == "Enter") {
+            keyTile.classList.add("enter-key-tile");
+        } else {
+            keyTile.classList.add("key-tile");
+        }
+        keyboardRow.appendChild(keyTile);
+    }
+    document.body.appendChild(keyboardRow);
+}
+
+function processKey(e) {
+    e = { "code" : this.id };
+    processInputScreen(e);
+}
+
+function processInputKeyboard(e) {
+  if (estado.filaActual >= 6) return; // Si ya se han llenado todas las filas, termina el juego
+
+  if ("KeyA" <= e.code && e.code <= "KeyZ") {
+    if (estado.columnaActual < 5) { // Si aún no se han llenado todas las columnas de la fila actual
+      agregarLetra(e.code[3]); // Agrega la letra a la grilla
+    }
+  } else if (e.code == "Backspace") {
+    removerLetra(); // Remueve la última letra ingresada en la fila actual
+  } else if (e.code == "Enter") {
+    const palabra = obtenerPalabraActual();
+    if (esPalabraInvalida(palabra)) {
+      revelarPalabra(palabra);
+      estado.filaActual++;
+      estado.columnaActual = 0;
+    } else {
+      alert('Palabra invalida!');
+    }
+  }
+
+  actualizarGrilla(); // Actualiza la grilla en el DOM
+
+  if (estado.filaActual === 5) {
+    alert(`Perdiste!, la palabra secreta era: ${estado.secret}.`);
+  }
+}
+
+function processInputScreen(e) {
+  if (estado.filaActual === 5) return; // Si ya se han llenado todas las filas, termina el juego
+
+  if ("KeyA" <= e.code && e.code <= "KeyZ") {
+    if (estado.columnaActual < 5) { // Si aún no se han llenado todas las columnas de la fila actual
+      agregarLetra(e.code[3]); // Agrega la letra a la grilla
+    }
+  } else if (e.code == "Backspace") {
+    removerLetra(); // Remueve la última letra ingresada en la fila actual
+  } else if (e.code == "Enter") {
+    const palabra = obtenerPalabraActual();
+    if (esPalabraInvalida(palabra)) {
+      revelarPalabra(palabra);
+      estado.filaActual++;
+      estado.columnaActual = 0;
+    } else {
+      alert('Palabra invalida!');
+    }
+  }
+
+  actualizarGrilla(); // Actualiza la grilla en el DOM
+
+  if (estado.filaActual === 5) {
+    alert(`Perdiste!, la palabra secreta era: ${estado.secret}.`);
+  }
+}
+
+// document.getElementById('reiniciar').addEventListener('click', reiniciar);
+// function reiniciar() {
+//   window.location.reload();
+// }
 iniciar();
