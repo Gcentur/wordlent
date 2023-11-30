@@ -1,0 +1,20 @@
+export const palabras = [
+  'abeto', 'actor', 'aguas', 'agudo', 'alado', 'albas', 'altar', 'Anton', 'atizo', 'avala', 'avion', 'azul',
+  'babas', 'bacas', 'bache', 'bajes', 'balas', 'bebes', 'belen', 'Berto', 'bicho', 'bizco', 'bueno', 'busca',
+  'cabra', 'cafes', 'cajas', 'calar', 'calas', 'calca', 'calla', 'calma', 'camba', 'campo', 'canas', 'cantos', 'capto', 'caras',
+  'carlo', 'carro', 'casas', 'catar', 'caida', 'cejas', 'Celia', 'cenas', 'cepas', 'cerca', 'cerco', 'cerdo', 'chile', 'china',
+  'ciego', 'cines', 'citas', 'clara', 'clavo', 'colas', 'colon', 'colon', 'coral', 'coras', 'corea', 'corro', 'cosas', 'costo',
+  'crudo', 'curar', 'dados', 'dagas', 'datos', 'danos', 'dejar', 'dejes', 'denso', 'dices', 'divos', 'dotes', 'dunas', 'dures',
+  'duros', 'ellos', 'echas', 'edito', 'elevo', 'emule', 'emulo', 'enoje', 'error', 'estas', 'fallo', 'falto', 'feria', 'fetos',
+  'fijos', 'filas', 'filia', 'finca', 'gafas', 'galas', 'Gales', 'galos', 'ganas', 'ganes', 'gases', 'gasto', 'giras', 'gordo',
+  'gorro', 'grave', 'grito', 'hacer', 'halos', 'hasta', 'heces', 'hielo', 'ideas', 'india', 'inflo', 'islas', 'japon', 'jefas',
+  'jerga', 'Josue', 'julio', 'malos', 'mania', 'marca', 'marco', 'marti', 'maria', 'melon', 'menos', 'meter', 'metro', 'moler',
+  'monte', 'morir', 'nacer', 'nadar', 'narro', 'natas', 'naves', 'necio', 'ninos', 'notas', 'nubes', 'obras', 'ocios', 'ollas',
+  'ondas', 'onzas', 'opera', 'otros', 'ovulo', 'oirte', 'palas', 'paris', 'pedir', 'pelea', 'pelos', 'peras', 'perro', 'pesos',
+  'pilas', 'pinto', 'poder', 'quedo', 'quema', 'quito', 'reloj', 'rubio', 'rasco', 'ratas', 'ratos', 'redes', 'remar',
+  'renos', 'renta', 'sabio', 'sacar', 'salir', 'selva', 'sanar', 'sopas', 'secar', 'serio', 'situo', 'sobar', 'sonar', 'subir',
+  'sucio', 'siete', 'tabla', 'tacos', 'Tania', 'tapas', 'tazas', 'telon', 'tener', 'tenis', 'terco', 'terso', 'Texas', 'tipos',
+  'tiras', 'todas', 'todos', 'tomar', 'Tomas', 'tonos', 'tonto', 'toque', 'torpe', 'trote', 'vacas', 'vagos', 'valer', 'valor',
+  'veces', 'vedas', 'velas', 'vemos', 'venas', 'venir', 'verde', 'viera', 'vigas', 'vinos', 'vivir', 'volar', 'votar', 'yates',
+  'yemas', 'yemen', 'yendo', 'yenes', 'yesca', 'yogur', 'yugos', 'zonas', 'zorro', 'zurdo', 'zurra', 'zurri', 'zurro', 'zurza', 'zurzo', 'zurce'
+];
