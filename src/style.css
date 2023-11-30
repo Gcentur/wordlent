@@ -106,6 +106,37 @@ button {
   margin-bottom: 0;
   position: relative;
 }
+.subtitulo {
+  color: white;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1rem;
+  margin-bottom: 0;
+  position: relative;
+}
+@keyframes highlight {
+  0% {background-color: transparent;}
+  50% {background-color: #b59f3b;}
+  100% {background-color: transparent;}
+}
+
+#mensaje-contenedor {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 80%;
+  margin: 0 auto;
+}
+
+#mensaje {
+  color: white;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1rem;
+  margin-bottom: 2;
+  position: relative;
+  animation: highlight 1s;
+}
 .keyboard-row {
     width: 400px;
     margin: 0 auto;
@@ -120,7 +151,7 @@ button {
     background-color: #818384;
     border-radius: 8px;
     color: azure;
-    /* Text */
+    /* Texto */
     font-size: 20px;
     font-weight: bold;
     display: flex;
@@ -134,7 +165,7 @@ button {
     height: 40px;
     margin: 1px;
     background-color: #818384;
-    /* Text */
+    /* Texto */
     font-size: 20px;
     font-weight: bold;
     display: flex;
@@ -147,3 +178,4 @@ button {
 .key-tile, .enter-key-tile {
   font-family: Arial, Helvetica, sans-serif;
 }
+

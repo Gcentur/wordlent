@@ -1,7 +1,8 @@
 import { palabras } from './diccionario.js';
-const diccionario = palabras;
-const estado = {
-  secret: diccionario[Math.floor(Math.random() * diccionario.length)].toLowerCase(),
+const MENSAJE = document.getElementById('mensaje');
+const DICCIONARIO = palabras;
+const ESTADO = {
+  secret: DICCIONARIO[Math.floor(Math.random() * DICCIONARIO.length)].toLowerCase(),
   grid: Array(6)
     .fill()
     .map(() => Array(5).fill('')),
@@ -10,31 +11,31 @@ const estado = {
 };
 
 function dibujarGrilla(contenedor) {
-  const grid = document.createElement('div');
-  grid.className = 'grid';
+  const GRID = document.createElement('div');
+  GRID.className = 'grid';
 
   for (let i = 0; i < 6; i++) {
     for (let j = 0; j < 5; j++) {
-      dibujarCaja(grid, i, j);
+      dibujarCaja(GRID, i, j);
     }
   }
 
-  contenedor.appendChild(grid);
+  contenedor.appendChild(GRID);
 }
 
 function actualizarGrilla() {
-  for (let i = 0; i < estado.grid.length; i++) {
-    for (let j = 0; j < estado.grid[i].length; j++) {
-      const box = document.getElementById(`box${i}${j}`);
-      box.textContent = estado.grid[i][j];
+  for (let i = 0; i < ESTADO.grid.length; i++) {
+    for (let j = 0; j < ESTADO.grid[i].length; j++) {
+      const BOX = document.getElementById(`box${i}${j}`);
+      BOX.textContent = ESTADO.grid[i][j];
     }
   }
 }
 
-function dibujarCaja(contenedor, row, col, letter = '') {
+function dibujarCaja(contenedor, row, col, letra = '') {
   const box = document.createElement('div');
   box.className = 'box';
-  box.textContent = letter;
+  box.textContent = letra;
   box.id = `box${row}${col}`;
 
 
@@ -43,17 +44,17 @@ function dibujarCaja(contenedor, row, col, letter = '') {
 }
 
 function obtenerPalabraActual() {
-  return estado.grid[estado.filaActual].reduce((prev, curr) => prev + curr).toLowerCase();
+  return ESTADO.grid[ESTADO.filaActual].reduce((prev, curr) => prev + curr).toLowerCase();
 }
 
 function esPalabraInvalida(word) {
-  return diccionario.includes(word.toLowerCase());
+  return DICCIONARIO.includes(word.toLowerCase());
 }
 
-function obtenerNumOcurrenciasSecreto(word, letter) {
+function obtenerNumOcurrenciasSecreto(palabra, letter) {
   let result = 0;
-  for (let i = 0; i < word.length; i++) {
-    if (word[i] === letter) {
+  for (let i = 0; i < palabra.length; i++) {
+    if (palabra[i] === letter) {
       result++;
     }
   }
@@ -71,10 +72,10 @@ function obtenerPosicionOcurrencia(word, letter, position) {
 }
 
 function revelarPalabra(adivinar) {
-  const row = estado.filaActual;
-  const animation_duration = 500; // ms
+  const row = ESTADO.filaActual;
+  const animation_duration = 500;
   adivinar = adivinar.toLowerCase();
-  const secret = estado.secret.toLowerCase();
+  const secret = ESTADO.secret.toLowerCase();
 
   for (let i = 0; i < 5; i++) {
     const box = document.getElementById(`box${row}${i}`);
@@ -123,48 +124,60 @@ function revelarPalabra(adivinar) {
   }
   
   const GANASTE = adivinar === secret;
-  const PERDISTE = estado.filaActual === 5;
+  const PERDISTE = ESTADO.filaActual === 5;
+
+  function showMessage(message) {
+    // Get the message element
+    const mensaje = document.getElementById('mensaje');
+  
+    // Reset the animation
+    mensaje.style.animation = 'none';
+    mensaje.offsetHeight; // Trigger reflow
+    mensaje.style.animation = null; 
+  
+    // Set the new message
+    mensaje.textContent = message;
+  }
 
   setTimeout(() => {
     if (GANASTE) {
-      alert('Felicidades, ganaste!');
+      showMessage('Felicidades, ganaste! 😀');
     } else if (PERDISTE) {
-      alert(`Perdiste!, la palabra secreta era: ${estado.secret}.`);
+      showMessage(`Perdiste!, la palabra secreta era: ${ESTADO.secret}.`);
     } else {
-      alert(`La palabra ingresada no es válida, pero aquí está lo que escribiste: ${adivinar}`);
+      showMessage(`La palabra ingresada no es válida`);
     }
   }, 3 * animation_duration);
 }
+
 
 function esLetra(key) {
   return key.length === 1 && key.match(/[a-z]/i);
 }
 
 function agregarLetra(letra) {
-  if (estado.columnaActual === 5) return;
-  estado.grid[estado.filaActual][estado.columnaActual] = letra;
-  estado.columnaActual++;
+  if (ESTADO.columnaActual === 5) return;
+  ESTADO.grid[ESTADO.filaActual][ESTADO.columnaActual] = letra;
+  ESTADO.columnaActual++;
 }
 
 function removerLetra() {
-  if (estado.columnaActual === 0) return;
-  estado.grid[estado.filaActual][estado.columnaActual - 1] = '';
-  estado.columnaActual--;
+  if (ESTADO.columnaActual === 0) return;
+  ESTADO.grid[ESTADO.filaActual][ESTADO.columnaActual - 1] = '';
+  ESTADO.columnaActual--;
 }
 
 function iniciar() {
   const juego = document.getElementById('juego');
   dibujarGrilla(juego);
 
-  console.log(`La palabra secreta es: ${estado.secret}`);
+  console.log(`La palabra secreta es: ${ESTADO.secret}`);
 
   // Listen for Key Press
   document.addEventListener("keyup", (e) => {
     processInputKeyboard(e);
   })
 }
-
-
 
 let keyboard = [
     ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"],
@@ -189,7 +202,7 @@ for (let i = 0; i < keyboard.length; i++) {
             keyTile.id = "Backspace";
         }
         else if ("A" <= key && key <= "Z") {
-            keyTile.id = "Key" + key; // "Key" + "A";
+            keyTile.id = "Key" + key;
         } 
 
         keyTile.addEventListener("click", processKey);
@@ -210,10 +223,10 @@ function processKey(e) {
 }
 
 function processInputKeyboard(e) {
-  if (estado.filaActual >= 6) return; // Si ya se han llenado todas las filas, termina el juego
+  if (ESTADO.filaActual >= 6) return; // Si ya se han llenado todas las filas, termina el juego
 
   if ("KeyA" <= e.code && e.code <= "KeyZ") {
-    if (estado.columnaActual < 5) { // Si aún no se han llenado todas las columnas de la fila actual
+    if (ESTADO.columnaActual < 5) { // Si aún no se han llenado todas las columnas de la fila actual
       agregarLetra(e.code[3]); // Agrega la letra a la grilla
     }
   } else if (e.code == "Backspace") {
@@ -222,25 +235,25 @@ function processInputKeyboard(e) {
     const palabra = obtenerPalabraActual();
     if (esPalabraInvalida(palabra)) {
       revelarPalabra(palabra);
-      estado.filaActual++;
-      estado.columnaActual = 0;
+      ESTADO.filaActual++;
+      ESTADO.columnaActual = 0;
     } else {
-      alert('Palabra invalida!');
+      MENSAJE.textContent = `Esa palabra no existe en este juego, no hay presupuesto 😔.`;
     }
   }
 
   actualizarGrilla(); // Actualiza la grilla en el DOM
 
-  if (estado.filaActual === 5) {
-    alert(`Perdiste!, la palabra secreta era: ${estado.secret}.`);
+  if (ESTADO.filaActual === 5) {
+    alert(`Perdiste!, la palabra secreta era: ${ESTADO.secret}.`);
   }
 }
 
 function processInputScreen(e) {
-  if (estado.filaActual === 5) return; // Si ya se han llenado todas las filas, termina el juego
+  if (ESTADO.filaActual >= 6) return; // Si ya se han llenado todas las filas, termina el juego
 
   if ("KeyA" <= e.code && e.code <= "KeyZ") {
-    if (estado.columnaActual < 5) { // Si aún no se han llenado todas las columnas de la fila actual
+    if (ESTADO.columnaActual < 5) { // Si aún no se han llenado todas las columnas de la fila actual
       agregarLetra(e.code[3]); // Agrega la letra a la grilla
     }
   } else if (e.code == "Backspace") {
@@ -249,8 +262,8 @@ function processInputScreen(e) {
     const palabra = obtenerPalabraActual();
     if (esPalabraInvalida(palabra)) {
       revelarPalabra(palabra);
-      estado.filaActual++;
-      estado.columnaActual = 0;
+      ESTADO.filaActual++;
+      ESTADO.columnaActual = 0;
     } else {
       alert('Palabra invalida!');
     }
@@ -258,13 +271,8 @@ function processInputScreen(e) {
 
   actualizarGrilla(); // Actualiza la grilla en el DOM
 
-  if (estado.filaActual === 5) {
-    alert(`Perdiste!, la palabra secreta era: ${estado.secret}.`);
+  if (ESTADO.filaActual === 5) {
+    alert(`Perdiste!, la palabra secreta era: ${ESTADO.secret}.`);
   }
 }
-
-// document.getElementById('reiniciar').addEventListener('click', reiniciar);
-// function reiniciar() {
-//   window.location.reload();
-// }
 iniciar();
