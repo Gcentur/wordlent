@@ -46,7 +46,8 @@ function obtenerPalabraActual() {
   return ESTADO.grid[ESTADO.filaActual].reduce((prev, curr) => prev + curr).toLowerCase();
 }
 
-function esPalabraInvalida(word) {
+function esPalabraValida(word) {
+  // Ahora aceptamos cualquier palabra de 5 letras
   return word.length === 5;
 }
 
@@ -70,6 +71,14 @@ function obtenerPosicionOcurrencia(word, letter, position) {
   return result;
 }
 
+function showMessage(message) {
+  const mensaje = document.getElementById('mensaje');
+  mensaje.style.animation = 'none';
+  mensaje.offsetHeight; // Trigger reflow
+  mensaje.style.animation = null; 
+  mensaje.textContent = message;
+}
+
 function revelarPalabra(adivinar) {
   const row = ESTADO.filaActual;
   const animation_duration = 500;
@@ -78,14 +87,14 @@ function revelarPalabra(adivinar) {
 
   for (let i = 0; i < 5; i++) {
     const box = document.getElementById(`box${row}${i}`);
-    const letra = box.textContent.toLowerCase();
-    const keyTile = document.getElementById(`Key${letra.toUpperCase()}`)
+    const letra = box.textContent.toLowerCase(); // Obtenemos la letra ingresada
+    const keyTile = document.getElementById(`Key${letra.toUpperCase()}`) // Obtenemos la tecla correspondiente a la letra
     const numOcurrenciasSecreto = obtenerNumOcurrenciasSecreto(secret, letra);
     const numOcurrenciasAdivinanza = obtenerNumOcurrenciasSecreto(adivinar, letra);
     const posicionLetra = obtenerPosicionOcurrencia(adivinar, letra, i);
 
     setTimeout(() => {
-      if (!esPalabraInvalida(adivinar)) {
+      if (!esPalabraValida(adivinar)) {
         box.classList.add('invalid');
         if (keyTile && !keyTile.classList.contains('right')) {
           keyTile.classList.add('invalid');
@@ -105,12 +114,12 @@ function revelarPalabra(adivinar) {
             keyTile.classList.add('right');
           }
         } else if (secret.includes(letra)) {
-          box.classList.add('wrong'); 
+          box.classList.add('wrong'); // Pintamos de amarillo si la letra está en la palabra secreta pero en una posición incorrecta
           if (keyTile && !keyTile.classList.contains('right')) {
             keyTile.classList.add('wrong');
           }
         } else {
-          box.classList.add('empty');
+          box.classList.add('empty'); // Pintamos de rojo si la letra no está en la palabra secreta
           if (keyTile && !keyTile.classList.contains('right')) {
             keyTile.classList.add('empty');
           }
@@ -124,20 +133,6 @@ function revelarPalabra(adivinar) {
   
   const GANASTE = adivinar === secret;
   const PERDISTE = ESTADO.filaActual === 5;
-
-  function showMessage(message) {
-
-    const mensaje = document.getElementById('mensaje');
-  
-
-    mensaje.style.animation = 'none';
-    mensaje.offsetHeight; 
-    mensaje.style.animation = null; 
-  
-
-    mensaje.textContent = message;
-  }
-
   setTimeout(() => {
     if (GANASTE) {
       showMessage('Felicidades, ganaste! 😀');
@@ -147,10 +142,6 @@ function revelarPalabra(adivinar) {
       showMessage(`La palabra ingresada no es válida`);
     }
   }, 3 * animation_duration);
-}
-
-function esLetra(key) {
-  return key.length === 1 && key.match(/[a-z]/i);
 }
 
 function agregarLetra(letra) {
@@ -201,7 +192,6 @@ for (let i = 0; i < keyboard.length; i++) {
         else if ("A" <= key && key <= "Z") {
             keyTile.id = "Key" + key;
         } 
-
         keyTile.addEventListener("click", processKey);
 
         if (key == "Enter") {
@@ -227,22 +217,22 @@ function processInput(e) {
       agregarLetra(e.code[3]); // Agrega la letra a la grilla
     }
   } else if (e.code == "Backspace") {
-    removerLetra(); // borrar con el teclado
+    removerLetra(); // Remueve la última letra ingresada en la fila actual
   } else if (e.code == "Enter") {
     const palabra = obtenerPalabraActual();
-    if (esPalabraInvalida(palabra)) {
+    if (esPalabraValida(palabra)) {
       revelarPalabra(palabra);
       ESTADO.filaActual++;
       ESTADO.columnaActual = 0;
     } else {
-      alert('Palabra invalida!');
+      showMessage('Palabra invalida!');
     }
   }
 
-  actualizarGrilla();
+  actualizarGrilla(); // Actualiza la grilla en el DOM
 
   if (ESTADO.filaActual === 6) {
-    alert(`Perdiste!, la palabra secreta era: ${ESTADO.secret}.`);
+    showMessage(`Perdiste!, la palabra secreta era: ${ESTADO.secret}.`);
   }
 }
 
