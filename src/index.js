@@ -47,7 +47,6 @@ function obtenerPalabraActual() {
 }
 
 function esPalabraInvalida(word) {
-  // Ahora aceptamos cualquier palabra de 5 letras
   return word.length === 5;
 }
 
@@ -106,12 +105,12 @@ function revelarPalabra(adivinar) {
             keyTile.classList.add('right');
           }
         } else if (secret.includes(letra)) {
-          box.classList.add('wrong'); // Pintamos de amarillo si la letra está en la palabra secreta pero en una posición incorrecta
+          box.classList.add('wrong'); 
           if (keyTile && !keyTile.classList.contains('right')) {
             keyTile.classList.add('wrong');
           }
         } else {
-          box.classList.add('empty'); // Pintamos de rojo si la letra no está en la palabra secreta
+          box.classList.add('empty');
           if (keyTile && !keyTile.classList.contains('right')) {
             keyTile.classList.add('empty');
           }
@@ -132,7 +131,7 @@ function revelarPalabra(adivinar) {
   
 
     mensaje.style.animation = 'none';
-    mensaje.offsetHeight; // Trigger reflow
+    mensaje.offsetHeight; 
     mensaje.style.animation = null; 
   
 
@@ -228,7 +227,7 @@ function processInput(e) {
       agregarLetra(e.code[3]); // Agrega la letra a la grilla
     }
   } else if (e.code == "Backspace") {
-    removerLetra(); // Remueve la última letra ingresada en la fila actual
+    removerLetra(); // borrar con el teclado
   } else if (e.code == "Enter") {
     const palabra = obtenerPalabraActual();
     if (esPalabraInvalida(palabra)) {
@@ -240,7 +239,7 @@ function processInput(e) {
     }
   }
 
-  actualizarGrilla(); // Actualiza la grilla en el DOM
+  actualizarGrilla();
 
   if (ESTADO.filaActual === 6) {
     alert(`Perdiste!, la palabra secreta era: ${ESTADO.secret}.`);
